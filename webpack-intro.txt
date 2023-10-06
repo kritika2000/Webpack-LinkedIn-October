@@ -1,0 +1,131 @@
+Webpack allows us to take all our assests and turn them into a
+production ready bundle.
+All of our files are considered as modules and we tell 
+webpack to load those modules.
+
+Why we need webpack?
+We used to load modules by attaching each of our JS script file
+in the HTML, where we have to keep the order of the files in mind 
+in which they're written as one file can have code dependent
+on another file.
+
+With webpack, a single file(bundle.js) is created for all the 
+modules in the project.
+Files/assests are loaded only loaded when they're required.
+Webpack does support ES6 modules.
+Webpack perform transformation also.
+
+SetUp Webpack project:-
+
+1. Install webpack and webpack-cli(to use webpack commands).
+npm i webpack webpack-cli --save-dev.
+
+2. Created src, dist folders and aded index.js and 
+index.html respectively.
+
+3. We includes a script with source, main.js(by default name) 
+which us created by webpack by running ./node_modules/.bin/webpack command
+or npx webpack. This commands rus webpack and updates the dist folder.
+Every time we update our JS we need to run webpack cmd to see the changes in bundle.js.
+
+4. By default, webpack creates a dist folder and inside that creates
+a main.js file, we can change these configurations inside 
+webpack.config.js
+
+5. Webpack Loaders -> These allow us to perform transformations, 
+eg:- babel loader coverts JSX in react apps to Vanilla JS
+for the browser to run.
+
+6. Set up Loaders(Babel).
+
+7. Install loader -> npm install babel-loader @babel/core --save-dev
+
+8. Config webpack inside webpack.config.js
+module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /(node_modules)/,
+        use: {
+          loader: 'babel-loader',
+        },
+      },
+    ],
+  },
+9. Install babel preset by running the command 
+npm install @babel/preset-env --save-dev
+Add options key to the above rule.
+use: {
+        loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env'],
+          },
+    },
+
+10. Install React and React presets to see the webpack(loaders) working.
+npm install react react-dom --save-dev
+npm install @babel/preset-react
+
+11. Add .babelrc file in the root folder for babel configurations
+and add babel, react presets.
+presets: ['@babel/preset-env', '@babel/preset-react'],
+
+12. Load Assets With Webpack.
+Webpack turns Sass and Less to CSS.
+We can import CSS files as modules inside JS files
+rather than adding the link tag inside HTML file.
+
+We need a CSS, Style Loader to achieve that.
+
+13. We can load images with webpack using the 
+url-loader.
+Install url-loader using npm install url-loader.
+Add the following rule inside config file.
+{
+  test: /\.(png|jpeg)$/,
+  use: [{ loader: 'url-loader' }],
+},
+
+14. Setup a development server, to watch changes in the file,
+as of now we have to rebuild the webpack after every change in
+Js files to see them in the bundle.js file.
+
+Webpack dev server uses nodejs-express server.
+npm install webpack-dev-server --save-dev.
+-Add the following configurations to the config file.
+devServer: {
+    contentBase: path.join(__dirname, 'dist'),
+    port: 9000,
+},
+-Add a 'dev' script in package.json file.
+
+// Code Splitting
+
+It allows us to create separate bundles rather than putting
+all the code inside one bundle.js file by creating multiple
+entry points inside the the webpack.config.js
+
+Eg: If an application has about.js and contact.js files, 
+then we can create separate bundles for each of these.
+This allows us to load only the code that is required.
+
+// Adding Multiple Entry points.
+Added, about, contact JS and HTML files inside
+src and dist folder respectively.
+Add multiple entry points by adding the following code:-
+entry: {
+  about: './src/about.js',
+  contact: './src/contact.js',
+},
+output: {
+  filename: '[name].bundle.js',
+  path: path.resolve(__dirname, 'dist'),
+},
+
+// HTML Webpack Plugin
+This generates the HTML file that links to the bundle.
+Earlier we created html files manually for each of the JS
+files(depending on the entry points), HTML plugin creates 
+HTML files for each bundle.
+
+We can set some template for our HTML files created by the plugin.
